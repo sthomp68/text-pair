@@ -11,7 +11,7 @@ There are three different modes of use for the Text::Pair object: index, server,
 This directory contains the shingle index, bibliography and a directory called query_docs which contains uploaded documents sent as queries to the server. This directory must be readable and writeable by the www user.
 
 ==document_queue==
-An reference to an array of hashes of the form {name => 'Gettysburg Address', file => '/path/to/gb.doc'}. Name can be any string and file is the full path to the file to be indexed.
+An reference to an array of hashes of the form {{{ {name => 'Gettysburg Address', file => '/path/to/gb.doc'} }}}. Name can be any string and file is the full path to the file to be indexed.
 
 
 ==shingle_size==
