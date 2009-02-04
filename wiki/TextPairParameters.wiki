@@ -17,6 +17,7 @@ An reference to an array of hashes of the form {name => 'Gettysburg Address', fi
 
 ==shingle_size==
 default 3
+
 How many words to include in each shingle. 
 
 ==stop_words==
