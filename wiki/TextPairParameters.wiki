@@ -22,35 +22,39 @@ How many words to include in each shingle.
 ==stop_words==
 Words to be ignored and not used in shingles. This is represented internally as a hash, but is set by an array reference.
 
-start_tags
+==start_tags==
 A reference to an array of tags that indicate the start of document for processing purposes. If multiple tags are present, only one is required to open a document and begin accumulating shingles. If no start tags are submitted, the entire document will be processed.
 
-omit_tags
+==omit_tags==
 A reference to an array of hashes of the form {start => '<div1>', end => '</div1>'}, containing opening and closing tags that describing sections of text to be skipped during indexing.
 
-min_word_length
+==min_word_length==
 An integer specifying the minimum byte length for a word. Words shorter than this length will not be indexed.
 
-normalize_case default 1
+==normalize_case==
+*default 1*
 0 or 1; 1 to flatten upper case characters to lower case when building shingles.
 
-omit_numerals default 1
+==omit_numerals==
+*default 1*
 0 or 1; 1 to remove numerals from shingles.
 
-word_pattern default [\&A-Za-z0-9\177-\377][\&A-Za-z0-9\177-\377\';]*
+==word_pattern==
+*default {{{[\&A-Za-z0-9\177-\377][\&A-Za-z0-9\177-\377\';]*}}}*
 A string, a regular expression defining a pattern that matches a word. This pattern controls word sementation.
 
-replacement_patterns
-A reference to an array of arrays regular expressions to be run on each word before shingling. Arrays look like [[qr/\&lt/o, ''], with the 0th element being the pattern to match and the 1st element being the replacement pattern. It can be useful to compile the patterns using qr for efficiency.
+==replacement_patterns==
+A reference to an array of arrays regular expressions to be run on each word before shingling. Arrays look like {{{[[qr/\&lt/o, '']}}}, with the 0th element being the pattern to match and the 1st element being the replacement pattern. It can be useful to compile the patterns using qr for efficiency.
 
-break_before_patterns => [],
-break_after_patterns => [],
+==break_before_patterns, break_after_patterns==
 A reference to an arrays of patterns that should split a word into two, with the split occurring either before or after that match. The matching characters are retained in the word and hence in the shingle. Most often used to split words on apostrophes.
 
-min_bilateral_overlap default .5
+==min_bilateral_overlap==
+*default .5*
 Decimal from 0 to 1, the minimum fraction of distinct shingles from either match that must appear in both matches. For example, if set to .5, half of all the distinct shingles in the set of all shingles that appear in either match range must appear in both match ranges.
 
-min_unilateral_overlap default .5
+==min_unilateral_overlap==
+*default .5*
 Decimal from 0 to 1, the minimum fraction of disinct shingles from each match range that must appear in the other match. For example, if set to .3, then 30% of the distinct shingles in each match range must appear in the other match range.
 
 max_gap default 5
