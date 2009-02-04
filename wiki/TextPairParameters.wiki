@@ -16,7 +16,7 @@ An reference to an array of hashes of the form {name => 'Gettysburg Address', fi
 
 
 ==shingle_size==
-default 3
+*default 3*
 
 How many words to include in each shingle. 
 
@@ -34,6 +34,7 @@ An integer specifying the minimum byte length for a word. Words shorter than thi
 
 ==normalize_case==
 *default 1*
+
 0 or 1; 1 to flatten upper case characters to lower case when building shingles.
 
 ==omit_numerals==
@@ -58,35 +59,51 @@ Decimal from 0 to 1, the minimum fraction of distinct shingles from either match
 *default .5*
 Decimal from 0 to 1, the minimum fraction of disinct shingles from each match range that must appear in the other match. For example, if set to .3, then 30% of the distinct shingles in each match range must appear in the other match range.
 
-max_gap default 5
+==max_gap==
+*default 5*
+
 Integer, the maximum number of continous shingles in a match range that do not appear in the other match range. For example, if set to 5, then any match range in a pair may contain at most 5 running shingles that do not appear in the other match range.
 
-min_pair_shingles default 2
+==min_pair_shingles==
+*default 2*
+
 Integer, the minimum number of shingles that must be shared by both matches.
 
-check_overmatch default 1
+==check_overmatch==
+*default 1*
+
 0 or 1, 1 to check to see if the query document appears to be a near-duplicate of an existing document. If this is set 0, no check will be done, and duplicate query documents may take a very long time to process.
 
-max_doc_percent_matches default .50
+==max_doc_percent_matches==
+*default .50*
+
 Decimal 0 to 1, the fraction of shingles that can be shared between two documents before they are considered to be duplicates.
 
-max_doc_shingles_matches default 10000
+==max_doc_shingles_matches==
+*default 10000*
+
 Integer, the number of shingles that can be shared between two documents before they are considered to be duplicates.
 
-min_doc_length_match_test default 5000
+==min_doc_length_match_test==
+*default 5000*
+
 Integer, the minimum document shingle length for considering a document to be a duplicate or partial duplicate of another document. It may be useful to submit shorter query documents that are wholly contained within other documents in the corpus, so duplicates are not reported for smaller documents.
 	
-num_shingle_buckets default 1000000
-Integer, the number of shingle buckets to be used in the shingle index. Shingles are looked up by loading into memory a range of indexed values for shingles sharing the same hash value, or "bucket". For example, the shingle 
+==num_shingle_buckets==
+*default 1000000*
 
+Integer, the number of shingle buckets to be used in the shingle index. Shingles are looked up by loading into memory a range of indexed values for shingles sharing the same hash value, or "bucket". 
 
-# For the Bloom filter, the capacity (number of entries, i.e. estimated number of shingles,
-# and the error rate
-bloom_capacity default 150000000
+==shingle_server_port
+Integer, the port to run the shingle server on.
+
+==Bloom Filter Parameters==
+===bloom_capacity===
+*default 150000000*
+
 Integer, the desired Bloom filter capacity. This should be set to the number of distinct shingles in the corpus.
 
-bloom_error default 0.001
-Decimal, the desired error rate for the Bloom filter. Lower error rates will require a larger amount of memory for the Bloom filter.
+===bloom_error===
+*default 0.001*
 
-shingle_server_port
-Integer, the port to run the shingle server on.
+Decimal, the desired error rate for the Bloom filter. Lower error rates will require a larger amount of memory for the Bloom filter.
