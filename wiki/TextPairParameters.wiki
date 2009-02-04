@@ -7,7 +7,6 @@ There are three different modes of use for the Text::Pair object: index, server,
 
 = Parameters=
 
-
 ==data_directory==
 This directory contains the shingle index, bibliography and a directory called query_docs which contains uploaded documents sent as queries to the server. This directory must be readable and writeable by the www user.
 
@@ -27,7 +26,7 @@ Words to be ignored and not used in shingles. This is represented internally as 
 A reference to an array of tags that indicate the start of document for processing purposes. If multiple tags are present, only one is required to open a document and begin accumulating shingles. If no start tags are submitted, the entire document will be processed.
 
 ==omit_tags==
-A reference to an array of hashes of the form {start => '<div1>', end => '</div1>'}, containing opening and closing tags that describing sections of text to be skipped during indexing.
+A reference to an array of hashes of the form {{{ {start => '<div1>', end => '</div1>'} }}}, containing opening and closing tags that describing sections of text to be skipped during indexing.
 
 ==min_word_length==
 An integer specifying the minimum byte length for a word. Words shorter than this length will not be indexed.
