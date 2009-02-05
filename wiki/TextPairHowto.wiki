@@ -1,0 +1,17 @@
+#summary How to index a corpus, set up a server, and run a query on a Text::Pair collection.
+
+= Introduction =
+
+There are three different modes of use for the Text::Pair object: index, server, and query mode. This document describes how to accomplish each stage.
+
+In order to provide a fast search through a large corpus, Text::Pair creates an index of all "shingles" (sequences of N words) in the corpus. For a corpus many millions of words, this index is likely too large to fit into memory, so it is stored on disk. In order to minimize disk seeks, a Bloom filter (the Bloom::Faster Perl module) is used to 
+
+ During the indexing, several files are created and stored in the {{{data_directory}}}. Documents in the {{{document_queue}}} are read into memory, shingled, and written out to {{{docindex}}} in the {{{data_directory}}}.
+  * Shingles are written out to {{{shingles}}}, then sorted by hash value 
+
+= Details =
+
+Add your content here.  Format your content with:
+  * Text in *bold* or _italic_
+  * Headings, paragraphs, and lists
+  * Automatic links to other wiki pages
