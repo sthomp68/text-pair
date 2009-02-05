@@ -9,7 +9,8 @@ There are three different modes of use for the Text::Pair object: index, server,
 In order to provide a fast search through a large corpus, Text::Pair creates an index of all "shingles" (sequences of N words) in the corpus. For a corpus many millions of words, this index is likely too large to fit into memory, so it is stored on disk in a file called {{{shingles.idx}}}. The structure of {{{shingles.idx}}} is as follows:
 
 {{{
-shingle_bucket	shingle	document_id:shingle_sequence:start_byte:byte_length	document_id:shingle_sequence:start_byte:byte_length	document_id:shingle_sequence:start_byte:byte_length ...}}}
+shingle_bucket	shingle	document_id:shingle_sequence:start_byte:byte_length	document_id:shingle_sequence:start_byte:byte_length	document_id:shingle_sequence:start_byte:byte_length ...
+}}}
 
 The {{{shingle_bucket}}} is a hash value computed for each shingle, and its range varies according to the {{{num_shingle_buckets}}} parameter. The more buckets you have, the less shingles in each bucket and the less you'll need to read in any given lookup from disk, and the less you'll need to search through to find a given shingle. Each {{{shingle_bucket}}} is a key to a hash, which sits in memory, whose values are the byte range for that bucket in {{{shingles.idx}}}. For best performance, you should set {{{num_shingle_buckets}}} to the highest value that will fit in memory -- 10,000,000 hash keys and values will take a little less than 1.5GBs, for example.
 
