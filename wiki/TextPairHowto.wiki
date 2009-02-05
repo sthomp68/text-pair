@@ -22,7 +22,8 @@ Note that {{{byte_length}}} may be considerably longer than the number of bytes 
 
 Here is a sample entry in {{{shingles.idx}}}:
 
-{{{99804   william_advances_meet   7512:5661:69410:24      7676:632111:8746474:24  8048:84361:1110423:24   8397:14051:172147:24
+{{{
+99804   william_advances_meet   7512:5661:69410:24      7676:632111:8746474:24  8048:84361:1110423:24   8397:14051:172147:24
 }}}
 
 
