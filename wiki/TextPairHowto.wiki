@@ -4,7 +4,20 @@
 
 There are three different modes of use for the Text::Pair object: index, server, and query mode. This document describes how to accomplish each stage.
 
-In order to provide a fast search through a large corpus, Text::Pair creates an index of all "shingles" (sequences of N words) in the corpus. For a corpus many millions of words, this index is likely too large to fit into memory, so it is stored on disk. In order to minimize disk seeks, a Bloom filter (the Bloom::Faster Perl module) is used to 
+=Architecture=
+==Index Structure==
+In order to provide a fast search through a large corpus, Text::Pair creates an index of all "shingles" (sequences of N words) in the corpus. For a corpus many millions of words, this index is likely too large to fit into memory, so it is stored on disk in a file called {{{shingles.idx}}}. The structure of {{{shingles.idx}}} is as follows:
+
+{{{
+hash_value	shingle	document_id:shingle_sequence:start_byte:offset	document_id:shingle_sequence:start_byte:offset	document_id:shingle_sequence:start_byte:offset
+99804   william_advances_meet   7512:5661:69410:24      7676:632111:8746474:24  8048:84361:1110423:24   8397:14051:172147:24
+}}}
+
+
+In order to minimize disk seeks, a Bloom filter (the Bloom::Faster Perl module) is used to check initially if a given shingle has been seen before. If the Bloom filter responds in the affirmative, the hash of the shingle is calculated, and the shingle hash index is consulted to find the byte range to read from the sorted shingle index ({{{shinges.idx}}}). That range is read into memory and searched for the relevant shingle. If it is not found, then the Bloom filter has given a false positive.
+
+http://en.wikipedia.org/wiki/Bloom_filter
+http://search.cpan.org/~palvaro/Bloom-Faster-1.4/
 
  During the indexing, several files are created and stored in the {{{data_directory}}}. Documents in the {{{document_queue}}} are read into memory, shingled, and written out to {{{docindex}}} in the {{{data_directory}}}.
   * Shingles are written out to {{{shingles}}}, then sorted by hash value 
