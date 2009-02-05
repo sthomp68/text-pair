@@ -9,8 +9,19 @@ There are three different modes of use for the Text::Pair object: index, server,
 In order to provide a fast search through a large corpus, Text::Pair creates an index of all "shingles" (sequences of N words) in the corpus. For a corpus many millions of words, this index is likely too large to fit into memory, so it is stored on disk in a file called {{{shingles.idx}}}. The structure of {{{shingles.idx}}} is as follows:
 
 {{{
-hash_value	shingle	document_id:shingle_sequence:start_byte:offset	document_id:shingle_sequence:start_byte:offset	document_id:shingle_sequence:start_byte:offset
-99804   william_advances_meet   7512:5661:69410:24      7676:632111:8746474:24  8048:84361:1110423:24   8397:14051:172147:24
+shingle_bucket	shingle	document_id:shingle_sequence:start_byte:byte_length	document_id:shingle_sequence:start_byte:byte_length	document_id:shingle_sequence:start_byte:byte_length ...}}}
+
+The {{{shingle_bucket}}} is a hash value computed for each shingle, and its range varies according to the {{{num_shingle_buckets}}} parameter. The more buckets you have, the less shingles in each bucket and the less you'll need to read in any given lookup from disk, and the less you'll need to search through to find a given shingle. Each {{{shingle_bucket}}} is a key to a hash, which sits in memory, whose values are the byte range for that bucket in {{{shingles.idx}}}. For best performance, you should set {{{num_shingle_buckets}}} to the highest value that will fit in memory -- 10,000,000 hash keys and values will take a little less than 1.5GBs, for example.
+
+{{{shingle}}} is simply the multi-word sequence found in the text, with underscores replacing spaces. Shingles may skip short words that are less than {{{min_word_length}}} bytes long, or words in the {{{stop_words}}} array.
+
+After these two values, there are 1 - N values of the form {{{document_id:shingle_sequence:start_byte:offset}}}, which represent the locations of all occurrences of this particular shingle in the corpus. {{{document_id}}} is an integer from 0 - N based on load order. {{{shingle_sequence}}} is a 1 - N integer; its value represents the location of this shingle in the sequence of shingles in the document. {{{start_byte}}} is the starting byte offset of the shingle in the document, and {{{byte_length}}} is the length in bytes of the words covered by the shingle. 
+
+Note that {{{byte_length}}} may be considerably longer than the number of bytes in the actual shingle, due to words omitted from the shingle. Omitted words may be short words, {{{stop_words}}}, or words found withing {{{omit_tags}}}. Although these words are not considered for purposes of shingle matching, they are retrieved when printing pairs.
+
+Here is a sample entry in {{{shingles.idx}}}:
+
+{{{99804   william_advances_meet   7512:5661:69410:24      7676:632111:8746474:24  8048:84361:1110423:24   8397:14051:172147:24
 }}}
 
 
