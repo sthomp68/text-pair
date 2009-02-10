@@ -42,8 +42,7 @@ my $corpus = Text::Reuse->new(shingle_size => 3,
 	replacement_patterns => \@reps,
 	stop_words => \@stop_words,
 	document_queue => \@docs,
-	data_directory => '/mydata',
-);
+	data_directory => '/mydata');
 $corpus->index;
 }}}
 
@@ -106,13 +105,10 @@ Run this script in a way that it stays active -- daemonize, nohup, or whatever y
 #!/usr/bin/perl -w
 
 use strict;
-use CGI;
 use Text::Reuse;
 use LWP::Simple;
 
 my $file_root = '/mydata';
-my $cgi = CGI->new();
-print $cgi->header();
 
 my $stamp = $$ . time();
 my $filename = $ARGV[0];
@@ -124,16 +120,16 @@ my @reps = ([qr/honour/, 'honor'],
 			[qr/honour/, 'honor']);
 
 my $corpus = Text::Reuse->new(shingle_size => 3,
-	 							min_word_length => 3,
-	 							omit_tags => \@omit_tags,
-								word_pattern => "[\&A-Za-z0-9\177-\377][\&A-Za-z0-9\177-\377\']*",
-								replacement_patterns => \@reps,
-	 							stop_words => \@stop_words,
-								data_directory => $file_root,
-								min_bilateral_overlap => .3,
-								min_unilateral_overlap => .3,
-								max_gap => 10,
-								shingle_server_port => 1234);
+	min_word_length => 3,
+	omit_tags => \@omit_tags,
+	word_pattern => "[\&A-Za-z0-9\177-\377][\&A-Za-z0-9\177-\377\']*",
+	replacement_patterns => \@reps,
+	stop_words => \@stop_words,
+	data_directory => $file_root,
+	min_bilateral_overlap => .3,
+	min_unilateral_overlap => .3,
+	max_gap => 10,
+	shingle_server_port => 1234);
 
 my $pairs = $corpus->pair({file => $filename});
 
@@ -161,4 +157,4 @@ foreach my $pair (@$pairs) {
 
 }}}
 
-This script is designed to run with a 
+This script is designed to run from the command line. It takes one parameter, the path to the query document. It shingles the query document and compares it to all corpus documents, and prints results in a very basic format. The querying proccess could also be run as a CGI. Please see the Google Code downloads for more example scripts.
