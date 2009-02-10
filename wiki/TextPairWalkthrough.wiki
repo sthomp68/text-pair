@@ -37,13 +37,13 @@ my @docs = ({name => 'A Midsummer Night\'s Dreamfile => '/texts/mid.txt'},
 			{name => 'Finnegan\'s Wake' => '/texts/fin.txt'});
 			
 my $corpus = Text::Reuse->new(shingle_size => 3,
-	 							min_word_length => 3,
-								word_pattern => "[\&A-Za-z0-9\177-\377][\&A-Za-z0-9\177-\377\']*",
-								replacement_patterns => \@reps,
-	 							stop_words => \@stop_words,
-	 							document_queue => \@docs,
-								data_directory => '/mydata',
-							);
+	min_word_length => 3,
+	word_pattern => "[\&A-Za-z0-9\177-\377][\&A-Za-z0-9\177-\377\']*",
+	replacement_patterns => \@reps,
+	stop_words => \@stop_words,
+	document_queue => \@docs,
+	data_directory => '/mydata',
+);
 $corpus->index;
 }}}
 
