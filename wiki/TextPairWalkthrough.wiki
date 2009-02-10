@@ -1,2 +1,164 @@
 =Overview=
-The Text::Pair module allows 
+Getting Text::Pair running involves three steps: index, server, and query. This document will provide examples of each step in the process.
+
+=Index=
+==Corpus==
+Assemble the corpus of documents you wish to use. Text::Pair has been tested with corpora of several hundred million words and more than ten thousand documents.
+
+Plain text or XML-style documents are best suited for Text::Pair. Text::Pair knows how to look for tags that open a document ({{{<body>}}}, e.g.) or specify regions of text to ignore within a document, if there are parts of your text that you do not want to index.
+
+You can keep your documents wherever you like, so long as you don't move them. When printing results, byte ranges are read out of the documents from their location on disk.
+
+==Data Directory== 
+Create a directory to store the output of the indexing process, and a directory inside that in which to store query_documents that are submitted for matching.
+
+{{{
+mkdir mydata
+mkdir mydata/query_docs
+}}}
+
+==Index==
+Create a Perl script that uses Text::Pair:
+
+{{{
+#!/usr/bin/perl
+use Text::Pair;
+use strict;
+
+my $file_root = '/mydata';
+
+my @stop_words = ('a', 'the', 'it', 'is');
+
+my @reps = ([qr/honour/, 'honor'], 
+			[qr/lorry/, 'truck'], 
+			[qr/honour/, 'honor']);
+
+my @docs = ({name => 'A Midsummer Night\'s Dreamfile => '/texts/mid.txt'},
+			{name => 'Finnegan\'s Wake' => '/texts/fin.txt'});
+			
+my $corpus = Text::Reuse->new(shingle_size => 3,
+	 							min_word_length => 3,
+								word_pattern => "[\&A-Za-z0-9\177-\377][\&A-Za-z0-9\177-\377\']*",
+								replacement_patterns => \@reps,
+	 							stop_words => \@stop_words,
+	 							document_queue => \@docs,
+								data_directory => '/mydata',
+							);
+$corpus->index;
+}}}
+
+Running a script like this will create the necessary files for finding reused text in the {{{/mydata}}} directory. A very large corpus of many hundreds of millions of words may take many hours to index.
+
+==Server==
+Before you can query your corpus by sending it text and asking it to find examples of parts of that text, you need to set up the hits server. The server's job is to load into memory the Bloom filter and the shingle bucket index, and use them find any occurrences of shingles that are sent its way. Because these data structures can be large and take time to build, it's better that they live in memory rather than being built each time a query is sent.
+
+Create a server script. You don't need to use IO::Socket if you prefer something else.
+
+{{{
+!#/usr/bin/perl
+
+use Text::Reuse;
+use Bloom::Faster;
+use IO::Socket;
+
+my $port = 1234;
+
+my $corpus = Text::Reuse->new(data_directory => '/mydata', shingle_server_port => $port);
+$corpus->loadIndex();
+
+print "Loaded\n";
+
+use IO::Socket;
+my $sock = new IO::Socket::INET (
+	LocalHost => 'localhost',
+	LocalPort => '1222',
+	Proto => 'tcp',
+	Listen => 1,
+	Reuse => 1,
+);
+"Could not create socket: $!\n" unless $sock;
+
+my ($new_sock, $line, $kid);
+while ($new_sock = $sock->accept()) {
+	next if $kid = fork;
+	die "fork: $!" unless defined $kid;
+	close $sock;
+	while ( ($line = <$new_sock>) && ($line ne "XXXENDSHINGLESXXX\n") ) {
+		chomp($line);
+		my $hits = $library->_shingleHits($line);
+		if ($hits) {
+			print $new_sock $hits . "\n";
+		} else {
+			print $new_sock "\n";
+		}
+	}
+
+    exit;
+} continue {
+    close $new_sock;
+}
+}}}
+
+Run this script in a way that it stays active -- daemonize, nohup, or whatever you need to do. It will need to be running any time you want to accept queries.
+
+==Query==
+{{{
+#!/usr/bin/perl -w
+
+use strict;
+use CGI;
+use Text::Reuse;
+use LWP::Simple;
+
+my $file_root = '/mydata';
+my $cgi = CGI->new();
+print $cgi->header();
+
+my $stamp = $$ . time();
+my $filename = $ARGV[0];
+
+my @stop_words = ('a', 'the', 'it', 'is');
+
+my @reps = ([qr/honour/, 'honor'], 
+			[qr/lorry/, 'truck'], 
+			[qr/honour/, 'honor']);
+
+my $corpus = Text::Reuse->new(shingle_size => 3,
+	 							min_word_length => 3,
+	 							omit_tags => \@omit_tags,
+								word_pattern => "[\&A-Za-z0-9\177-\377][\&A-Za-z0-9\177-\377\']*",
+								replacement_patterns => \@reps,
+	 							stop_words => \@stop_words,
+								data_directory => $file_root,
+								min_bilateral_overlap => .3,
+								min_unilateral_overlap => .3,
+								max_gap => 10,
+								shingle_server_port => 1234);
+
+my $pairs = $corpus->pair({file => $filename});
+
+print "Number of pairs: " . scalar(@$pairs) . "\n";
+
+foreach my $pair (@$pairs) {
+	if (($a_start_byte == -1) && ($b_start_byte == -1)) {
+		print "Document $b_name had more than " . $library->{max_doc_shingle_matches} . " matches with the target document.\n";
+	} elsif ($a_start_byte == -1) { 
+		print "The query document had more than " . (100 * $library->{max_doc_percent_matches}) . "% of shingles matched in $b_name.\n";
+	} elsif ($b_start_byte == -1) { 
+		print "Document $b_name had more than " . (100 * $library->{max_doc_shingle_matches}) . "% of shingles matched in the target document.\n";
+	} else {
+		my ($apre, $a, $apost, $bpre, $b, $bpost) = $library->pairContext($pair, $filename, 100);
+		$apre = cleanTags($apre);
+		$a = cleanTags($a);
+		$apost = cleanTags($apost);
+		$bpre = cleanTags($bpre);
+		$b = cleanTags($b);
+		$bpost = cleanTags($bpost);
+		print "Query document ($a_start_byte - " . ($a_start_byte + $a_length) . "):\n$apre**$**$apost\n\n";
+		print "$b_name ($b_start_byte - " . ($b_start_byte + $b_length) . "):\n$bpre**$b**$bpost\n\n";
+	}
+}
+
+}}}
+
+This script is designed to run with a 
