@@ -172,10 +172,10 @@ foreach my $pair (@$pairs) {
 
 This script is designed to run from the command line. It takes one parameter, the path to the query document. It shingles the query document and compares it to all corpus documents, and prints results in a very basic format. The querying proccess could also be run as a CGI, to accept text from the web and return a page of results.
 
-Execute {{{text-pair0.9/scripts/index.pl}}}:
+Execute {{{text-pair0.9/scripts/query.pl}}}:
 
 {{{
-perl scripts/index.pl
+perl scripts/query.pl
 }}}
 
 and you should see results like the following:
