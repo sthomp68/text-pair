@@ -3,11 +3,10 @@
 =Overview=
 Text::Pair can efficiently find similar text between a query document and large, pre-indexed corpus. The search can be configured to span minor differences between matched areas to increase the flexibility of matching.
 
-* Index: An index script runs over a corpus of documents and creates a shingle index file or all n-grams in the corpus.
- 
-* Server: A shingle hit server loads this index, opens a port and accepts incoming shingles and returns all the hits in the corpus for that shingle. 
+ * Index: An index script runs over a corpus of documents and creates a shingle index file or all n-grams in the corpus.
 
-* Query: A query script generates shingles for new documents, sends them to the shingle hit server to find all occurrences of shared shingles in the corpus, and generates a list of all shared text sequences between the query document and the indexed corpus.
+ * Server: A shingle hit server loads this index, opens a port and accepts incoming shingles and returns all the hits in the corpus for that shingle. 
+ * Query: A query script generates shingles for new documents, sends them to the shingle hit server to find all occurrences of shared shingles in the corpus, and generates a list of all shared text sequences between the query document and the indexed corpus.
 
 ==Index Structure==
 ===shingles.idx===
