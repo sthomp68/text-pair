@@ -53,6 +53,7 @@ A server script is run which loads into memory the Bloom filter and the shingle 
 In order to minimize disk seeks, a Bloom filter (the Bloom::Faster Perl module) is used to check initially if a given shingle has been seen before. When the server receives a shingle from the query script, it first checks to see if the Bloom filter might have seen it before, i.e. if it exists in the indexed corpus. If the Bloom filter responds in the affirmative, the hash of the shingle is calculated, and the shingle hash index ({{{buckets.idx}}} is consulted to find the byte range to read from the sorted shingle index ({{{shinges.idx}}}). That range is read into memory and searched for the relevant shingle. If it is not found, then the Bloom filter has given a false positive. If it is found, the server returns the occurrences of that shingle to the query script.
 ===About Bloom filters===
 Bloom filters in general: http://en.wikipedia.org/wiki/Bloom_filter
+
 Bloom::Faster perl module: http://search.cpan.org/~palvaro/Bloom-Faster-1.4/
 
 ===Processing Matched Shingles===
