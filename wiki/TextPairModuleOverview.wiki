@@ -21,7 +21,7 @@ The {{{shingle_bucket}}} is a hash value computed for each shingle, and its rang
 
 After these two values, there are 1 - N values of the form {{{document_id:shingle_sequence:start_byte:offset}}}, which represent the locations of all occurrences of this particular shingle in the corpus. {{{document_id}}} is an integer from 0 - N based on load order. {{{shingle_sequence}}} is a 1 - N integer; its value represents the location of this shingle in the sequence of shingles in the document. {{{start_byte}}} is the starting byte offset of the shingle in the document, and {{{byte_length}}} is the length in bytes of the words covered by the shingle. 
 
-Note that {{{byte_length}}} may be considerably longer than the number of bytes in the actual shingle, due to words omitted from the shingle. Omitted words may be short words, {{{stop_words}}}, or words found withing {{{omit_tags}}}. Although these words are not considered for purposes of shingle matching, they are retrieved when printing pairs.
+Note that {{{byte_length}}} may be considerably longer than the number of bytes in the actual shingle, due to words omitted from the shingle. Omitted words may be short words, {{{stop_words}}}, or words found withing {{{omit_tags}}}. Although these words are not considered for purposes of shingle matching, they are still retrieved when printing pairs, because the byte range for a given shingle refers to the original, unaltered document and includes everything between the first word and the last.
 
 Here is a sample entry in {{{shingles.idx}}}:
 
