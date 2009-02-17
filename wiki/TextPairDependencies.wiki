@@ -15,7 +15,7 @@ There is one Perl module you will need that you probably don't yet have, Bloom::
 
 http://search.cpan.org/~palvaro/Bloom-Faster-1.4/lib/Bloom/Faster.pm
 
-===BloomFaster hacking to get it to install on OS X===
+===Bloom::Faster hacking to get it to install on OS X===
 Type:
 {{{
 tar -xvf Bloom-Faster-1.4.tar
@@ -55,6 +55,8 @@ Type:
 sudo cp libbloom.dylib /usr/local/lib
 sudo cp bloom.h /usr/local/include
 }}}
+
+If you don't have {{{/usr/local}}}, you might try {{{/usr/lib}}} and {{{/usr/include}}}.
 
 Now for the Perl. Type:
 {{{
