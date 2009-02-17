@@ -4,11 +4,11 @@
 
 ==Standard Modules===
 Text::Pair relies on some standard Perl modules, such as:
-* Tie::File;
-* IO::Socket;
-* Fcntl;
+ * Tie::File;
+ * IO::Socket;
+ * Fcntl;
 
-You probably already have these.
+You probably already have these. If Perl complains, install them with CPAN.
 
 ==Bloom::Faster==
 There is one Perl module you will need that you probably don't yet have, Bloom::Faster. This is a great Bloom filter implementation that you must install. It seems to install fine on Linux with CPAN, but on OS X, it is very problematic.
