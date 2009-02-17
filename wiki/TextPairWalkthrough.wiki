@@ -3,6 +3,9 @@
 =Overview=
 Installing Text::Pair is a matter of putting the Text/Pair.pm module somewhere where Perl can find it. Getting Text::Pair running involves three steps: index, server, and query. This document will provide examples of each step in the process.
 =Install=
+==Dependencies==
+See [TextPairDependencies] for installation prerequisites. On Linux, things should be quite smooth. On OS X, there is one thorny install.
+==Text::Pair==
 Download {{{text-pair0.9.tar.gz}}} from: http://code.google.com/p/text-pair/downloads/list and unzip and untar it.
 
 Copy the Text folder inside the tarball into somewhere where your Perl looks for libraries -- {{{/System/Library/Perl/5.8.6}}}, for instance, on an OS X 10.4 machine.
