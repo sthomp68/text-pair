@@ -1,7 +1,7 @@
 #summary Overview of how the Text::Pair module works
 
 =Overview=
-Text::Pair can efficiently find similar text between a query document and large, pre-indexed corpus. The search can be configured to span minor differences between matched areas to increase the flexibility of matching.
+Text::Pair can efficiently find similar text between a query document and large, pre-indexed corpus. The search can be configured to span minor differences between matched areas to increase the flexibility of matching. The technique used to index and query the corpus draws inspiration from work in genetic sequencing as well as other text similarity approaches.
 
 There are three steps to using Text::Pair:
 
