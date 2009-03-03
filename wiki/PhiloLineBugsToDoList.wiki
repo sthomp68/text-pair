@@ -46,3 +46,5 @@ to
                         }
 
 }}}
+
+  * makeshinglesbatch.pl: div mapping does not include structural encoding such as "<front", so object maps can get out of sequence.  
