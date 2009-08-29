@@ -11,11 +11,23 @@ Text::Pair relies on some standard Perl modules, such as:
 You probably already have these. If Perl complains, install them with CPAN.
 
 ==Bloom::Faster==
+===CPAN Install===
+Great news! Palvaro has updated Bloom::Faster and the new version, 1.6, seems to install without a hitch using CPAN (tested on OS X Leopard Server). Just type into CPAN:
+
+{{{install Bloom::Faster}}}
+
+and you should end up with version 1.6 installed. Thanks a bundle, Palvaro.
+
+The new version has a {{{to_file}}} method that saves the filter to disk, which is something we should take advantage of with a new version of Text::Pair, for much faster startup times for the server.
+
+===Old Bloom::Faster manual install info for OS X===
+Try installing 1.6 from CPAN first before you mess with this old info.
+
 There is one Perl module you will need that you probably don't yet have, Bloom::Faster. This is a great Bloom filter implementation that you must install. It seems to install fine on Linux with CPAN, but on OS X, it is very problematic.
 
 http://search.cpan.org/~palvaro/Bloom-Faster-1.4/lib/Bloom/Faster.pm
 
-===Bloom::Faster hacking to get it to install on OS X===
+====Bloom::Faster hacking to get it to install on OS X====
 Type:
 {{{
 tar -xvf Bloom-Faster-1.4.tar
