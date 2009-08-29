@@ -1,4 +1,4 @@
-#summary One-Software needed to run Text::Pair
+#summary Software needed to run Text::Pair
 
 = Dependences required for Text::Pair =
 
